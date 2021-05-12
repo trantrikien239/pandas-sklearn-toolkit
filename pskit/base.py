@@ -107,3 +107,17 @@ class ExperimentBaseClassifier(BaseEstimator):
         for i in range(n_classes):
             metrics[f'auc_{classes[i]}'] = roc_auc[i]
         return metrics
+
+class BaseEnrichment(PipelineLogger, TransformerMixin, BaseEstimator):
+    def __init__(self, source_col, enrichment_df):
+        super().__init__()
+        self.source_col = source_col
+        self.enrichment_df = enrichment_df.set_index(self.source_col)
+        
+    def fit(self, X, y=None):
+        return self
+    def transform(self, X):
+        self.log_start()
+        X_ = X.join(self.enrichment_df, on=self.source_col, how='left')[self.enrichment_df.columns]
+        self.log_finish()
+        return X_
