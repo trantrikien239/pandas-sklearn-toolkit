@@ -15,7 +15,7 @@ from sklearn.impute import SimpleImputer
 from .base import PipelineLogger
 
 
-class PSKColumnSelector(BaseEstimator, TransformerMixin, PipelineLogger):
+class KColumnSelector(BaseEstimator, TransformerMixin, PipelineLogger):
     def __init__(self, columns=None):
         super().__init__()
         self.columns = columns
@@ -34,7 +34,7 @@ class PSKColumnSelector(BaseEstimator, TransformerMixin, PipelineLogger):
         self.log_finish()
         return X_
 
-class PSKSimpleImputer(SimpleImputer):
+class KSimpleImputer(SimpleImputer):
     def fit(self, X, y=None):
         self._cols = X.columns.tolist()
         self._dtypes = [str(X[col].dtype) for col in X.columns]
@@ -48,7 +48,7 @@ class PSKSimpleImputer(SimpleImputer):
             data[col] = data[col].astype(dtype)
         return data
 
-class PSKBasicPreprocessor(BaseEstimator, TransformerMixin, PipelineLogger):
+class KBasicPreprocessor(BaseEstimator, TransformerMixin, PipelineLogger):
     def __init__(self, 
                  lower_cols=True,
                 text_features=None,
@@ -128,7 +128,7 @@ class PSKBasicPreprocessor(BaseEstimator, TransformerMixin, PipelineLogger):
         self.log_finish()
         return self.X_
     
-class PSKPassThroughExcept(BaseEstimator, TransformerMixin, PipelineLogger):
+class KPassThroughExcept(BaseEstimator, TransformerMixin, PipelineLogger):
     """
     Applied as an alternative to `remainder='pass_through'` in PSKitColumnTransformer for 
     PSKitFeatureUnion.
