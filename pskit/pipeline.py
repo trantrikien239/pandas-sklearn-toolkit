@@ -27,7 +27,7 @@ set_config(display = 'diagram')
 
 from .base import PipelineLogger
 
-class PSKFeatureUnion(FeatureUnion):
+class KFeatureUnion(FeatureUnion):
     def _hstack(self, Xs):
         cols = [X.columns.tolist() for X in Xs]
         dtypes = []
@@ -41,7 +41,7 @@ class PSKFeatureUnion(FeatureUnion):
             data[col] = data[col].astype(dtype)
         return data
 
-class PSKColumnTransformer(ColumnTransformer):
+class KColumnTransformer(ColumnTransformer):
     def _hstack(self, Xs):
         cols = [X.columns.tolist() for X in Xs]
         dtypes = []

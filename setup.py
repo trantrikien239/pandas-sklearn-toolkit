@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __PKG_NAME__ = 'pskit'
-__PKG_VERSION__ = '0.0.3'
+__PKG_VERSION__ = '0.0.5'
 
 
 with open("README.md", "r", encoding="utf-8") as fh:
