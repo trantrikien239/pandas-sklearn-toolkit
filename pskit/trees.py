@@ -56,3 +56,5 @@ class KCatBoostClassifier(CatBoostClassifier, ExperimentBaseClassifier, Pipeline
         X_t = X.drop(X_e.index)
         y_t = y.loc[X_t.index]
         return X_t, X_e, y_t, y_e
+
+        
