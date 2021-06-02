@@ -28,16 +28,19 @@ set_config(display = 'diagram')
 
 class PipelineLogger(object):
     def __init__(self):
-        pass
+        self.logs = {}
         
-    def log_start(self):
-        self.start_time = time()
-        print(f'======== {self.__class__.__name__} - START ========')
+    def log_start(self, key, message=''):
+        self.logs[key] = {}
+        self.logs[key]['start_time'] = time()
+        print(f':::{self.__class__.__name__} ~ {key}::: START ::: {message}')
         return None
         
-    def log_finish(self):
-        self.duration = time() - self.start_time
-        print(f'======== {self.__class__.__name__} - FINISH =======> Take: {self.duration:.6f}(s)')
+    def log_finish(self, key, message=''):
+        self.logs[key]['finish_time'] = time()
+        self.logs[key]['duration'] = self.logs[key]['finish_time'] - self.logs[key]['start_time']
+        print(f':::{self.__class__.__name__} ~ {key}::: FINISH ::: Take {self.duration:.6f}(s)')
+        print(message)
 
 class ExperimentBaseClassifier(BaseEstimator):
     def evaluate(self, X_test, y_test):
@@ -108,7 +111,7 @@ class ExperimentBaseClassifier(BaseEstimator):
             metrics[f'auc_{classes[i]}'] = roc_auc[i]
         return metrics
 
-class BaseEnrichment(PipelineLogger, TransformerMixin, BaseEstimator):
+class BaseEnrichment(TransformerMixin, BaseEstimator):
     def __init__(self, source_col, enrichment_df):
         super().__init__()
         self.source_col = source_col
@@ -117,7 +120,5 @@ class BaseEnrichment(PipelineLogger, TransformerMixin, BaseEstimator):
     def fit(self, X, y=None):
         return self
     def transform(self, X):
-        self.log_start()
         X_ = X.join(self.enrichment_df, on=self.source_col, how='left')[self.enrichment_df.columns]
-        self.log_finish()
         return X_

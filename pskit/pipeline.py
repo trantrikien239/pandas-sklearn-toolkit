@@ -25,8 +25,6 @@ from sklearn import set_config
 from sklearn.pipeline import Pipeline
 set_config(display = 'diagram')
 
-from .base import PipelineLogger
-
 class KFeatureUnion(FeatureUnion):
     def _hstack(self, Xs):
         cols = [X.columns.tolist() for X in Xs]

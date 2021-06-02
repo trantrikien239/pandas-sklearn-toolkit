@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from .base import ExperimentBaseClassifier, PipelineLogger
+from .base import ExperimentBaseClassifier
 from catboost import CatBoostClassifier
 
-class KCatBoostClassifier(CatBoostClassifier, ExperimentBaseClassifier, PipelineLogger):
+class KCatBoostClassifier(CatBoostClassifier, ExperimentBaseClassifier):
     """
     Implement custom features compare to Catboost's standard classifier:
     - Automatic split X_eval, y_eval out of X_train, y_train
@@ -13,7 +13,6 @@ class KCatBoostClassifier(CatBoostClassifier, ExperimentBaseClassifier, Pipeline
         super().__init__(*args, **kwargs)
         
     def fit(self, X, y, self_evaluate=True, eval_set=None, **kwargs):
-        self.log_start()
         if self._init_params.get('cat_features') is not None:
             cat_features_ = [c for c in self._init_params['cat_features'] if c in X.columns]
             self._init_params['cat_features'] = cat_features_
@@ -35,7 +34,6 @@ class KCatBoostClassifier(CatBoostClassifier, ExperimentBaseClassifier, Pipeline
         super().fit(X_t, y_t, eval_set=(X_e, y_e), cat_features=cat_features_, text_features=text_features_)
         if self_evaluate:
             _ = self.evaluate(X_e, y_e)
-        self.log_finish()
         return self
         
     def add_na(self, X, y, na_label=0, cat_features_=None, text_features_=None):

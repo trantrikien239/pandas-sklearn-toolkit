@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
-from .base import PipelineLogger, ExperimentBaseClassifier
+from .base import ExperimentBaseClassifier
 from sklearn.linear_model import LogisticRegression
 
 
-class RandomClassifier(ExperimentBaseClassifier, PipelineLogger):
+class RandomClassifier(ExperimentBaseClassifier):
     def __init__(self):
         pass
     
@@ -27,7 +27,7 @@ class RandomClassifier(ExperimentBaseClassifier, PipelineLogger):
             proba_output[pred_output==v, i] = 1
         return proba_output
 
-class UnivariateLogisticRegression(LogisticRegression, ExperimentBaseClassifier, PipelineLogger):
+class UnivariateLogisticRegression(LogisticRegression, ExperimentBaseClassifier):
 
     def set_col(self, col_name):
         self.col_name = col_name

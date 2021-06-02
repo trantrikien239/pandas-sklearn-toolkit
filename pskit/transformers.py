@@ -12,10 +12,9 @@ from sklearn.base import TransformerMixin, BaseEstimator
 
 from sklearn.impute import SimpleImputer
 
-from .base import PipelineLogger
 
 
-class KColumnSelector(BaseEstimator, TransformerMixin, PipelineLogger):
+class KColumnSelector(BaseEstimator, TransformerMixin):
     def __init__(self, columns=None):
         super().__init__()
         self.columns = columns
@@ -29,9 +28,7 @@ class KColumnSelector(BaseEstimator, TransformerMixin, PipelineLogger):
             print(f"""Number of instructed columns: {len(self.columns)}\nNumber of columns in X: {len(X.columns)}\nNumber of selected colums (overlap): {len(self.selected_columns)}""")
         return self
     def transform(self, X):
-        self.log_start()
         X_ = X[self.selected_columns]
-        self.log_finish()
         return X_
 
 class KSimpleImputer(SimpleImputer):
@@ -48,7 +45,7 @@ class KSimpleImputer(SimpleImputer):
             data[col] = data[col].astype(dtype)
         return data
 
-class KBasicPreprocessor(BaseEstimator, TransformerMixin, PipelineLogger):
+class KBasicPreprocessor(BaseEstimator, TransformerMixin):
     def __init__(self, 
                  lower_cols=True,
                 text_features=None,
@@ -118,17 +115,15 @@ class KBasicPreprocessor(BaseEstimator, TransformerMixin, PipelineLogger):
     def fit(self, X, y=None):
         return self
     def transform(self, X):
-        self.log_start()
         self.X_ = X.copy()
         self.lower_column_name()
         self.column_type = self.get_column_type(self.X_)
         self.lower_txt()
         self.remove_high_cardinality()
         self.remove_high_na()
-        self.log_finish()
         return self.X_
     
-class KPassThroughExcept(BaseEstimator, TransformerMixin, PipelineLogger):
+class KPassThroughExcept(BaseEstimator, TransformerMixin):
     """
     Applied as an alternative to `remainder='pass_through'` in PSKitColumnTransformer for 
     PSKitFeatureUnion.
@@ -142,7 +137,5 @@ class KPassThroughExcept(BaseEstimator, TransformerMixin, PipelineLogger):
         return self
     
     def transform(self, X):
-        self.log_start()
         X_ = X[[c for c in X.columns if c not in self.except_cols]]
-        self.log_finish()
         return X_
