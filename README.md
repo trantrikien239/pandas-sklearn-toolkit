@@ -1,6 +1,9 @@
 # pandas-sklearn-toolkit
 
-Toolkit for an easy use of pandas, sklearn and popular ml libraries. Some basic features are presented below
+Toolkit for an easy use of pandas, sklearn and popular ml libraries. Some features that PSkit provides are:
+1. Base class for easier experimentation
+2. Sklearn pipelines that works with pandas
+3. Simple classes that support other analyses
 
 ## 1. Base classifier for experimentation
 
